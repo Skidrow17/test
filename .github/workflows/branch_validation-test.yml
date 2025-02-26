@@ -10,10 +10,11 @@ on:
 jobs:
   Deploy-to-dev-environment:
     runs-on: ubuntu-latest
-    # Dynamically determine environment based on branch
-    environment: ${{(github.ref == 'refs/heads/integration' && 'integration') || 
-                    (github.ref == 'refs/heads/staging' && 'staging') || 
-                    (github.ref == 'refs/heads/master' && 'prod') || 'unknown'}}
+   
+    environment: ${{github.ref == 'refs/heads/integration' && 'integration' || 
+                  github.ref == 'refs/heads/staging' && 'staging' || 
+                  github.ref == 'refs/heads/master' && 'prod'}}
+
     permissions:
         security-events: write
         actions: read
