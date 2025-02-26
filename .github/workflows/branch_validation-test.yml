@@ -47,6 +47,15 @@ jobs:
         run: |
           sf scanner run --target changed-sources/force-app --engine pmd -o pmd-results.sarif --pmdconfig ruleset.xml --format sarif
 
+      - name: 'Check for vulnerabilities'
+        run: |
+          VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
+          if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
+            echo "[INFO] Vulnerabilities found in the scan. Deployment aborted."
+          else
+            echo "[INFO] No vulnerabilities found. Proceeding with deployment."
+          fi
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
         with:
