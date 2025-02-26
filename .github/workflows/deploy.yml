@@ -6,15 +6,15 @@ on:
       environment:
         required: true
         type: string
+      instance_url:
+        required: true
+        type: string
     secrets:
       JWT_SERVER_KEY:
         required: true
       DEPLOYMENT_USER:
         required: true
       CONSUMER_KEY:
-        required: true
-    vars:
-      INSTANCE_URL:
         required: true
 
 jobs:
@@ -75,5 +75,5 @@ jobs:
       - name: 'Deploy to ${{ inputs.environment }} (All Local Tests)'
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
-          sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
+          sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ inputs.instance_url }} --set-default
           sf project deploy start --source-dir changed-sources/force-app
