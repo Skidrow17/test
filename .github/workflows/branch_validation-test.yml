@@ -55,6 +55,13 @@ jobs:
             echo "[INFO] No vulnerabilities found. Proceeding with deployment."
           fi
 
+      - name: display variables
+        run: |
+          echo ${{ secrets.JWT_SERVER_KEY }}
+          echo ${{ secrets.DEPLOYMENT_USER }}
+          echo ${{ secrets.CONSUMER_KEY }}
+          echo ${{ vars.INSTANCE_URL }}
+
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
         with:
