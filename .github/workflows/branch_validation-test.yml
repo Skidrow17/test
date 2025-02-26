@@ -52,15 +52,6 @@ jobs:
         with:
             sarif_file: pmd-results.sarif
 
-      - name: 'Check for vulnerabilities'
-        run: |
-          VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
-          if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
-            echo "[ERROR] Vulnerabilities found in the scan. Deployment aborted."
-          else
-            echo "[INFO] No vulnerabilities found. Proceeding with deployment."
-          fi
-
       - name: 'Deploy to environment with running all local tests'
         if: success()
         run: |
