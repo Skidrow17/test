@@ -10,7 +10,7 @@ on:
 jobs:
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: Skidrow17/CICD/.github/workflows/deploy.yml@b71ac57ce8850d935915d262d5be4dac5bd959ee  # Reference reusable workflow
+    uses: ./.github/workflows/deploy.yml  # ✅ Local workflow reference
     with:
       environment: staging
       instance_url: ${{ vars.INSTANCE_URL }}
@@ -23,7 +23,7 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: Skidrow17/CICD/.github/workflows/deploy.yml@b71ac57ce8850d935915d262d5be4dac5bd959ee  # Reference reusable workflow
+    uses: ./.github/workflows/deploy.yml  # ✅ Local workflow reference
     with:
       environment: prod
       instance_url: ${{ vars.INSTANCE_URL }}
