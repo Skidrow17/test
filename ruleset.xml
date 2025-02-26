@@ -9,7 +9,6 @@
         Custom ruleset for PMD Apex static code analysis.
     </description>
 
-    <!-- Performance Rules -->
-    <rule ref="category/apex/performance.xml/ApexCRUDViolation"/>
+    <rule ref="category/apex/security.xml/ApexCRUDViolation" priority="1" message="Validate CRUD"/>
 
 </ruleset>
