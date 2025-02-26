@@ -8,11 +8,11 @@ on:
       - 'force-app/**'
 
 jobs:
-  Deploy-to-dev-environment:
+  Deploy:
     runs-on: ubuntu-latest
-   
+    
     environment: ${{ github.base_ref == 'integration' && 'integration' || github.base_ref == 'staging' && 'staging' || github.base_ref == 'master' && 'prod' }}
-
+    name: Deploy to ${{ matrix.environment }}
     permissions:
         security-events: write
         actions: read
