@@ -10,7 +10,7 @@ on:
 jobs:
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: deploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
     secrets: inherit
@@ -21,7 +21,7 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: deploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
     secrets: inherit
