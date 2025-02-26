@@ -1,4 +1,4 @@
-name: Deploy to Salesforce Environment 2
+name: Deploy to Salesforce Environment
 
 on:
   workflow_call:
@@ -22,12 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to ${{ inputs.environment }}
     environment: ${{ inputs.environment }}
-    
-    # Define permissions here
-    permissions:
-      actions: read  # Allow actions: read
-      security-events: write  # Allow security-events: write
-      contents: read  # Allow contents: read
 
     steps:
       - name: 'Setup Node.js'
