@@ -1,4 +1,4 @@
-name: Deploy to Salesforce
+name: Deploy to Salesforce Environments
 
 on:
   pull_request:
@@ -10,22 +10,16 @@ on:
 jobs:
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: ./.github/workflows/deploy.yml
+    uses: your-org-or-repo-name/.github/workflows/deploy.yml@main
     with:
       environment: staging
+      instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
     secrets: inherit
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: ./.github/workflows/deploy.yml
+    uses: your-org-or-repo-name/.github/workflows/deploy.yml@main
     with:
       environment: prod
+      instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
     secrets: inherit
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
