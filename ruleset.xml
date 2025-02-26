@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Custom Apex Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 
+                             http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Custom ruleset for PMD Apex static code analysis.
+    </description>
+
+    <!-- Performance Rules -->
+    <rule ref="category/apex/performance.xml/AvoidDeeplyNestedIfStmts"/>
+    <rule ref="category/apex/performance.xml/AvoidDmlStatementsInLoops"/>
+    
+    <!-- Best Practices -->
+    <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier"/>
+    <rule ref="category/apex/bestpractices.xml/AvoidHardcodingId"/>
+    <rule ref="category/apex/bestpractices.xml/ClassNamingConventions"/>
+    
+    <!-- Security Rules -->
+    <rule ref="category/apex/security.xml/ApexXSSFromURLParam"/>
+    <rule ref="category/apex/security.xml/InsecureEndpoint"/>
+
+    <!-- Code Style Rules -->
+    <rule ref="category/apex/codestyle.xml/VariableNamingConventions"/>
+    <rule ref="category/apex/codestyle.xml/ClassNamingConventions"/>
+</ruleset>
