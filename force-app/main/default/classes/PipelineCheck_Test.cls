@@ -6,5 +6,6 @@ public with sharing class PipelineCheck_Test {
         PipelineCheck.PipelineCheck();
         Account acc = new Account();
         //insert acc;
+        
     }
 }
