@@ -1,4 +1,4 @@
-name: Deploy to Salesforce Environments
+name: Deploy to Salesforce
 
 on:
   pull_request:
