@@ -10,7 +10,7 @@ on:
 jobs:
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: your-org-or-repo-name/.github/workflows/deploy.yml@main
+    uses: .github/workflows/deploy.yml@main
     with:
       environment: staging
       instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
@@ -18,7 +18,7 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: your-org-or-repo-name/.github/workflows/deploy.yml@main
+    uses: .github/workflows/deploy.yml@main
     with:
       environment: prod
       instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
