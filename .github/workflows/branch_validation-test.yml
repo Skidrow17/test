@@ -1,5 +1,3 @@
-name: Deploy to cpqDev environment on push to main
-
 on:
   pull_request:
     branches: [ master , staging , integration ]
