@@ -1,5 +1,5 @@
 public with sharing class PipelineCheck {
-    public PipelineCheck() {
+    public static void PipelineCheck() {
         System.debug('Hello World 2025');
 
         Account acc = new Account();
