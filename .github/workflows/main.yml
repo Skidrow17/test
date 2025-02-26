@@ -10,16 +10,16 @@ on:
 jobs:
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml  # ✅ Local workflow reference
     with:
       environment: staging
-      instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
+      instance_url: ${{ vars.INSTANCE_URL }}
     secrets: inherit
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml  # ✅ Local workflow reference
     with:
       environment: prod
-      instance_url: ${{ vars.INSTANCE_URL }}  # ✅ Pass instance_url as input
+      instance_url: ${{ vars.INSTANCE_URL }}
     secrets: inherit
