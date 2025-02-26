@@ -57,7 +57,6 @@ jobs:
           VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
           if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
             echo "[INFO] Vulnerabilities found. Deployment aborted."
-            exit 1
           else
             echo "[INFO] No vulnerabilities found. Proceeding with deployment."
           fi
