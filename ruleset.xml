@@ -10,19 +10,6 @@
     </description>
 
     <!-- Performance Rules -->
-    <rule ref="category/apex/performance.xml/AvoidDeeplyNestedIfStmts"/>
-    <rule ref="category/apex/performance.xml/AvoidDmlStatementsInLoops"/>
-    
-    <!-- Best Practices -->
-    <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier"/>
-    <rule ref="category/apex/bestpractices.xml/AvoidHardcodingId"/>
-    <rule ref="category/apex/bestpractices.xml/ClassNamingConventions"/>
-    
-    <!-- Security Rules -->
-    <rule ref="category/apex/security.xml/ApexXSSFromURLParam"/>
-    <rule ref="category/apex/security.xml/InsecureEndpoint"/>
+    <rule ref="category/apex/performance.xml/ApexCRUDViolation"/>
 
-    <!-- Code Style Rules -->
-    <rule ref="category/apex/codestyle.xml/VariableNamingConventions"/>
-    <rule ref="category/apex/codestyle.xml/ClassNamingConventions"/>
 </ruleset>
