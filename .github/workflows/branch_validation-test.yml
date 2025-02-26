@@ -2,7 +2,7 @@ name: Deploy to cpqDev environment on push to main
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master , staging , integration ]
     types: [opened, synchronize, reopened]
     paths:
       - 'force-app/**'
@@ -10,7 +10,10 @@ on:
 jobs:
   Deploy-to-dev-environment:
     runs-on: ubuntu-latest
-    environment: cpqDevOrg
+    # Dynamically determine environment based on branch
+    environment: ${{(github.ref == 'refs/heads/integration' && 'integration') || 
+                    (github.ref == 'refs/heads/staging' && 'staging') || 
+                    (github.ref == 'refs/heads/master' && 'prod') || 'unknown'}}
     permissions:
         security-events: write
         actions: read
