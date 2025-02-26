@@ -1,7 +1,7 @@
 name: Deploy to cpqDev environment on push to main
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
     paths:
       - 'force-app/**'
