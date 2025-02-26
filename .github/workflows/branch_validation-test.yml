@@ -11,9 +11,9 @@ jobs:
   Deploy-to-dev-environment:
     runs-on: ubuntu-latest
    
-    environment: ${{github.ref == 'refs/heads/integration' && 'integration' || 
-                  github.ref == 'refs/heads/staging' && 'staging' || 
-                  github.ref == 'refs/heads/master' && 'prod'}}
+    environment: ${{github.ref == 'integration' && 'integration' || 
+                  github.ref == 'staging' && 'staging' || 
+                  github.ref == 'master' && 'prod'}}
 
     permissions:
         security-events: write
