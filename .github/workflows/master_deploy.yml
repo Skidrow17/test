@@ -11,7 +11,7 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: ./.github/workflow/calls/deploy.yml  
+    uses: ./.github/workflow/deploy.yml  
     with:
       environment: prod
       deploy_action: validation
