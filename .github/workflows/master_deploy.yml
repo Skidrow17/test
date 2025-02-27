@@ -11,7 +11,7 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: ./.github/actions/deploy.yml
+    uses: ./.github/actions/deploy.yml@main
     with:
       environment: prod
       deploy_action: validation
