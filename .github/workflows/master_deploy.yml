@@ -1,0 +1,22 @@
+name: Deploy to Production Environment
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'force-app/**'
+
+jobs:
+
+  deploy-to-prod:
+    uses: ./.github/workflows/deploy.yml  
+    with:
+      environment: prod
+      instance_url: ${{ vars.INSTANCE_URL }}
+    secrets: inherit
+
+    permissions:
+      actions: read 
+      security-events: write 
+      contents: read 

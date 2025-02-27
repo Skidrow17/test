@@ -1,0 +1,22 @@
+name: Deploy to Staging Environment
+
+on:
+  pull_request:
+    branches: [ staging ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'force-app/**'
+
+jobs:
+  
+  deploy-to-staging:
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment: staging
+      instance_url: ${{ vars.INSTANCE_URL }}
+    secrets: inherit
+
+    permissions:
+      actions: read 
+      security-events: write 
+      contents: read  
