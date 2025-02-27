@@ -10,7 +10,6 @@ on:
 jobs:
 
   deploy-to-prod:
-    if: github.base_ref == 'master'
     uses: ./.github/workflows/deploy.yml  
     with:
       environment: prod

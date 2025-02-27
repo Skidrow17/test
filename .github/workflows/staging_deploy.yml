@@ -8,8 +8,8 @@ on:
       - 'force-app/**'
 
 jobs:
+  
   deploy-to-staging:
-    if: github.base_ref == 'staging'
     uses: ./.github/workflows/deploy.yml
     with:
       environment: staging
