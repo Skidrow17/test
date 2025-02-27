@@ -1,0 +1,15 @@
+name: Scheduled Pipeline
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs every day at midnight UTC
+
+jobs:
+  run-scheduled-task:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run a script
+        run: echo "Hello, this is a scheduled GitHub Action!"
