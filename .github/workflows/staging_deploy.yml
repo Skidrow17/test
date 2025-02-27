@@ -11,7 +11,7 @@ jobs:
   
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: ./.github/actions/deploy.yml@main
+    uses: ./.github/actions/deploy
     with:
       environment: staging
       deploy_action: deploy
