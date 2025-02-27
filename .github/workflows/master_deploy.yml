@@ -1,4 +1,4 @@
-name: Deploy to Salesforce Environment PROD
+name: Deploy to Production Environment
 
 on:
   pull_request:
