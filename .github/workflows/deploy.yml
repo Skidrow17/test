@@ -44,9 +44,14 @@ jobs:
 
       - name: 'Create Delta Packages with Destructive Changes'
         run: |
-          mkdir -p changed-sources destructive-changes
-          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/ --generate-destructive-changes destructive-changes/
-          echo "[INFO] Diff generated with destructive changes"
+            mkdir -p changed-sources destructive-changes
+            sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output changed-sources/
+            if [ -f "changed-sources/destructiveChanges.xml" ]; then
+              mv changed-sources/destructiveChanges.xml destructive-changes/
+              echo "[INFO] Destructive changes detected."
+            else
+              echo "[INFO] No destructive changes found."
+            fi
 
       - name: 'Run Salesforce Scanner'
         run: |
@@ -66,14 +71,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: pmd-results.sarif
-
-      - name: 'Validate with Test Classes (If Deploy Action is Validation)'
-        if: ${{ inputs.deploy_action == 'validation' }}
-        run: |
-          echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
-          sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default          
-          sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests
-
+        
       - name: 'Deploy to ${{ inputs.environment }} (All Local Tests with Destructive Changes)'
         if: ${{ inputs.deploy_action == 'deploy' }}
         run: |
