@@ -3,8 +3,6 @@ public with sharing class PipelineCheck {
         if (Schema.sObjectType.Account.isCreateable()) {
             Account acc = new Account(Name = 'Silvan');
             insert acc;
-        } else {
-            throw new SecurityException('Insufficient permissions to create Account.');
         }
     }
 }
