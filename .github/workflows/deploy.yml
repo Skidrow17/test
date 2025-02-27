@@ -42,16 +42,11 @@ jobs:
           echo Y | sf plugins install sfdx-git-delta@6.3.0
           sf plugins
 
-      - name: 'Create Delta Packages with Destructive Changes'
+      - name: 'Create Delta Packages'
         run: |
-            mkdir -p changed-sources destructive-changes
-            sf sgd:source:delta --to "HEAD" --from "HEAD~1" --output changed-sources/
-            if [ -f "changed-sources/destructiveChanges.xml" ]; then
-              mv changed-sources/destructiveChanges.xml destructive-changes/
-              echo "[INFO] Destructive changes detected."
-            else
-              echo "[INFO] No destructive changes found."
-            fi
+            mkdir changed-sources
+            sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
+            echo "[INFO] Diff generated"
 
       - name: 'Run Salesforce Scanner'
         run: |
