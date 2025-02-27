@@ -6,6 +6,8 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - 'force-app/**'
+    tags:
+      - "staging-*"
 
 jobs:
   
@@ -15,9 +17,7 @@ jobs:
     with:
       environment: staging
       instance_url: ${{ vars.INSTANCE_URL }}
-    secrets: inherit
-    tags:
-      - "staging-*"
+    secrets: inherit   
 
     permissions:
       actions: read 
