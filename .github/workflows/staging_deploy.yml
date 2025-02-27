@@ -11,7 +11,7 @@ jobs:
   
   deploy-to-staging:
     if: github.base_ref == 'staging'
-    uses: ./.github/workflow_functions/deploy.yml
+    uses: ./.github/workflow/calls/deploy.yml
     with:
       environment: staging
       deploy_action: deploy
