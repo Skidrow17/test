@@ -44,9 +44,9 @@ jobs:
 
       - name: 'Create Delta Packages'
         run: |
-          mkdir changed-sources
-          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
-          echo "[INFO] Diff generated"
+            mkdir changed-sources
+            sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
+            echo "[INFO] Diff generated"
 
       - name: 'Run Salesforce Scanner'
         run: |
@@ -57,6 +57,7 @@ jobs:
           VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
           if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
             echo "[INFO] Vulnerabilities found. Deployment aborted."
+            exit 1
           else
             echo "[INFO] No vulnerabilities found. Proceeding with deployment."
           fi
@@ -65,17 +66,10 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: pmd-results.sarif
-
-      - name: 'Validate with Test Classes (If Deploy Action is Validation)'
-        if: ${{ inputs.deploy_action == 'validation' }}
-        run: |
-          echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
-          sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default          
-          sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests --checkonly
-          
-      - name: 'Deploy to ${{ inputs.environment }} (All Local Tests)'
+        
+      - name: 'Deploy to ${{ inputs.environment }} (All Local Tests with Destructive Changes)'
         if: ${{ inputs.deploy_action == 'deploy' }}
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
           sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
-          sf project deploy start --source-dir changed-sources/force-app
+          sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests
