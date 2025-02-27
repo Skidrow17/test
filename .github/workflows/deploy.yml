@@ -42,11 +42,11 @@ jobs:
           echo Y | sf plugins install sfdx-git-delta@6.3.0
           sf plugins
 
-      - name: 'Create Delta Packages'
+      - name: 'Create Delta Packages with Destructive Changes'
         run: |
-          mkdir changed-sources
-          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
-          echo "[INFO] Diff generated"
+          mkdir -p changed-sources destructive-changes
+          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/ --generate-destructive-changes destructive-changes/
+          echo "[INFO] Diff generated with destructive changes"
 
       - name: 'Run Salesforce Scanner'
         run: |
@@ -57,6 +57,7 @@ jobs:
           VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
           if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
             echo "[INFO] Vulnerabilities found. Deployment aborted."
+            exit 1
           else
             echo "[INFO] No vulnerabilities found. Proceeding with deployment."
           fi
@@ -72,10 +73,10 @@ jobs:
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
           sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default          
           sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests
-          
-      - name: 'Deploy to ${{ inputs.environment }} (All Local Tests)'
+
+      - name: 'Deploy to ${{ inputs.environment }} (All Local Tests with Destructive Changes)'
         if: ${{ inputs.deploy_action == 'deploy' }}
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
           sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
-          sf project deploy start --source-dir changed-sources/force-app
+          sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests --post-destructive-changes destructive-changes/destructiveChanges.xml
