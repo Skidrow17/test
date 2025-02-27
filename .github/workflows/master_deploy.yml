@@ -11,10 +11,10 @@ jobs:
 
   deploy-to-prod:
     if: github.base_ref == 'master'
-    uses: ./.github/workflows/deploy.yml  
+    uses: ./.github/workflow/deploy.yml  
     with:
       environment: prod
-      deploy_action: deploy
+      deploy_action: validation
     secrets: inherit
 
     permissions:
