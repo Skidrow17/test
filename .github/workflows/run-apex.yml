@@ -1,0 +1,33 @@
+name: Run Anonymous Apex
+
+on:
+  workflow_dispatch:
+    inputs:
+      apex_script:
+        description: "Anonymous Apex Code"
+        required: true
+        type: string
+
+jobs:
+  execute-apex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Salesforce CLI
+        run: |
+          npm install --global sfdx-cli
+
+      - name: Authenticate with Salesforce
+        env:
+          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
+        run: |
+          echo $SFDX_AUTH_URL > auth_file.txt
+          sfdx auth:sfdxurl:store -f auth_file.txt -a my-org
+          sfdx force:org:display -u my-org
+
+      - name: Execute Anonymous Apex
+        run: |
+          echo '${{ github.event.inputs.apex_script }}' > script.apex
+          sfdx force:apex:execute -u my-org -f script.apex
