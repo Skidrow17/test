@@ -5,13 +5,11 @@ public class PipelineCheck_Test {
 
         Test.startTest();
 
-        PipelineCheck.PipelineCheckMethod();
+        PipelineCheck1.PipelineCheckMethod();
 
         Test.stopTest();
         List<Account> accounts = [SELECT Id FROM Account];
         System.assertEquals(1, accounts.size(), 'An account should have been inserted.');
-
-        
     }
 }
 
