@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
-      deploy_action: validation
+      deploy_action: deploy
     secrets: inherit
 
     permissions:
