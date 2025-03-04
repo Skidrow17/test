@@ -10,5 +10,26 @@
     </description>
 
     <rule ref="category/apex/security.xml/ApexCRUDViolation" priority="1" message="Validate CRUD"/>
-
+    <rule name="NoSystemDebug"
+          language="apex"
+          message="Avoid using System.debug in Apex classes."
+          class="net.sourceforge.pmd.lang.rule.XPathRule"
+          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+        
+        <description>
+            This rule ensures that no Apex class contains 'System.debug' statements.
+        </description>
+        
+        <priority>1</priority>
+        
+        <properties>
+            <property name="xpath">
+                <value><![CDATA[
+                    //MethodCallExpression[
+                        starts-with(@Image, 'System.debug')
+                    ]
+                ]]></value>
+            </property>
+        </properties>
+    </rule>
 </ruleset>
