@@ -1,8 +1,9 @@
 name: Deploy to Production Environment
 
 on:
-  push:
+  pull_request:
     branches: [ master ]
+    types: [opened, synchronize, reopened]
     paths:
       - 'force-app/**'
 
@@ -12,7 +13,7 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
-      deploy_action: deploy
+      deploy_action: validate
     secrets: inherit
 
     permissions:
