@@ -48,6 +48,12 @@ jobs:
             sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
             echo "[INFO] Diff generated"
 
+      - name: 'Generate Package XML'
+        run: |
+            mkdir changed-sources
+            sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir "."
+            echo "[INFO] Diff generated"
+
       - name: 'Run Salesforce Scanner'
         run: |
           sf scanner run --target changed-sources/force-app --engine pmd -o pmd-results.sarif --pmdconfig ruleset.xml --format sarif
@@ -72,4 +78,4 @@ jobs:
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
           sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
-          sf project deploy start --source-dir changed-sources/force-app --test-level RunLocalTests --post-destructive-changes destructiveChanges/destructiveChanges.xml
+          sf project deploy start -x package/package.xml --post-destructive-changes destructiveChanges/destructiveChanges.xml
