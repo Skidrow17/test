@@ -4,7 +4,6 @@ public with sharing class PipelineCheck {
             Account acc = new Account(Name = 'Silvan');
             insert acc;
 
-            
         }
     }
 }
