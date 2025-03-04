@@ -1,4 +1,4 @@
-name: Deploy to Production Environment
+name: Validate to Production Environment
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  deploy-to-prod:
+  validate-to-prod:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
