@@ -50,7 +50,6 @@ jobs:
 
       - name: 'Generate Package XML'
         run: |
-            mkdir changed-sources
             sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir "."
             echo "[INFO] Diff generated"
 
