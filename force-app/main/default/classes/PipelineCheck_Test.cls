@@ -12,3 +12,4 @@ public class PipelineCheck_Test {
         System.assertEquals(1, accounts.size(), 'An account should have been inserted.');
     }
 }
+

@@ -1,22 +1,22 @@
-name: Deploy to Staging Environment
+name: Validate to Production Environment
 
 on:
   pull_request:
-    branches: [ staging ]
+    branches: [ master ]
     types: [opened, synchronize, reopened]
     paths:
       - 'force-app/**'
 
 jobs:
-  
-  deploy-to-staging:
+
+  validate-to-prod:
     uses: ./.github/workflows/deploy.yml
     with:
-      environment: staging
-      deploy_action: deploy
-    secrets: inherit   
+      environment: prod
+      deploy_action: validate
+    secrets: inherit
 
     permissions:
       actions: read 
       security-events: write 
-      contents: read  
+      contents: read 
