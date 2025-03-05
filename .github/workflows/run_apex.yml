@@ -7,12 +7,19 @@ on:
         description: "Anonymous Apex Code"
         required: true
         type: string
+      environment:
+        description: "Salesforce Environment"
+        required: true
+        type: choice
+        options:
+          - prod
+          - staging
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Run Anonymous Apex in prod
-    environment: prod
+    name: Run Anonymous Apex in ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
 
     steps:
       - name: 'Setup Node.js'
@@ -31,9 +38,15 @@ jobs:
       - name: 'Authenticate to Salesforce'
         run: |
           echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
-          sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
+          sf org login jwt \
+            --username ${{ secrets.DEPLOYMENT_USER }} \
+            --jwt-key-file server.key \
+            --client-id ${{ secrets.CONSUMER_KEY }} \
+            --instance-url ${{ vars.INSTANCE_URL }} \
+            --set-default \
+            --set-default-dev-hub
 
       - name: 'Execute Anonymous Apex'
         run: |
           echo "${{ inputs.apex_script }}" > script.apex
-          sf apex run --file script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+          sf apex run --file script.apex --target-org ${{ inputs.environment }}
