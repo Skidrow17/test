@@ -49,4 +49,4 @@ jobs:
       - name: 'Execute Anonymous Apex'
         run: |
           echo "${{ inputs.apex_script }}" > script.apex
-          sf apex run --file script.apex --target-org ${{ inputs.environment }}
+          sf apex run --file script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
