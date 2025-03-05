@@ -11,8 +11,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    name: Run Anonymous Apex in ${{ inputs.environment }}
-    environment: ${{ inputs.environment }}
+    name: Run Anonymous Apex in prod
+    environment: prod
 
     steps:
       - name: 'Setup Node.js'
