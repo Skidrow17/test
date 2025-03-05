@@ -10,5 +10,4 @@
     </description>
 
     <rule ref="category/apex/security.xml/ApexCRUDViolation" priority="1" message="Validate CRUD"/>
-
 </ruleset>

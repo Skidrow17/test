@@ -7,27 +7,46 @@ on:
         description: "Anonymous Apex Code"
         required: true
         type: string
+      environment:
+        description: "Salesforce Environment"
+        required: true
+        type: choice
+        options:
+          - prod
+          - staging
 
 jobs:
-  execute-apex:
+  deploy:
     runs-on: ubuntu-latest
+    name: Run Anonymous Apex in ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-      - name: Install Salesforce CLI
-        run: |
-          npm install --global sfdx-cli
+      - name: 'Checkout Source Code'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 2
 
-      - name: Authenticate with Salesforce
-        env:
-          SFDX_AUTH_URL: ${{ secrets.SFDX_AUTH_URL }}
-        run: |
-          echo $SFDX_AUTH_URL > auth_file.txt
-          sfdx auth:sfdxurl:store -f auth_file.txt -a my-org
-          sfdx force:org:display -u my-org
+      - name: 'Install Salesforce CLI'
+        run: npm install -g @salesforce/cli@2.77.6
 
-      - name: Execute Anonymous Apex
+      - name: 'Authenticate to Salesforce'
         run: |
-          echo '${{ github.event.inputs.apex_script }}' > script.apex
-          sfdx force:apex:execute -u my-org -f script.apex
+          echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
+          sf org login jwt \
+            --username ${{ secrets.DEPLOYMENT_USER }} \
+            --jwt-key-file server.key \
+            --client-id ${{ secrets.CONSUMER_KEY }} \
+            --instance-url ${{ vars.INSTANCE_URL }} \
+            --set-default \
+            --set-default-dev-hub
+
+      - name: 'Execute Anonymous Apex'
+        run: |
+          echo "${{ inputs.apex_script }}" > script.apex
+          sf apex run --file script.apex --target-org ${{ inputs.environment }}
