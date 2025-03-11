@@ -58,10 +58,8 @@ jobs:
           cp "${{ inputs.apex_script_path }}" temp_script.apex
           sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
 
-  trigger-slack-notification:
-    name: Slack Notification
-    uses: ./.github/workflows/slack.yml
-    with:
-      environment: prod
-      message: "Script ${{ inputs.apex_script_path }} excecuted Successfully"
-    secrets: inherit
+      - name: Slack Notification
+        uses: ./.github/workflows/slack.yml
+        with:
+          environment: prod
+          message: "Script ${{ inputs.apex_script_path }} excecuted Successfully"
