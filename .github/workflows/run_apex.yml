@@ -46,5 +46,6 @@ jobs:
             --set-default \
             --set-default-dev-hub
 
-      - name: 'Execute Anonymous Apex'
-        run: sf apex run --file ${{ inputs.apex_script_path }} --target-org ${{ secrets.DEPLOYMENT_USER }}
+      - name: 'Read Apex Script and Execute'
+        run: |
+          cat ${{ inputs.apex_script_path }} | sf apex run --target-org ${{ secrets.DEPLOYMENT_USER }}
