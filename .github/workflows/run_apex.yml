@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       apex_script_path:
-        description: "Path to Anonymous Apex Script (e.g., scripts/scripts-ci/script1.apex)"
+        description: "Path to Anonymous Apex Script (e.g., scripts/scripts-ci/)"
         required: true
         type: string
       environment:
