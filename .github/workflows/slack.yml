@@ -10,6 +10,10 @@ on:
         options:
           - prod
           - staging
+      message:
+        description: "Custom Slack Message"
+        required: true
+        type: string
 
 jobs:	
   send-notification:	
@@ -22,9 +26,9 @@ jobs:
     steps:	
       - name: Notify Slack	
         run: |	
-          curl -X POST -H "Content-type: application/json" \
+          curl -X POST -H "Content-type: application/json; charset=utf-8" \
             -H "Authorization: Bearer $SLACK_TOKEN" \
             --data '{
               "channel": "github-${{ inputs.environment }}",
-              "text": "📢 *New Workflow Triggered* 🚀\n\n*Environment:* `${{ inputs.environment }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
+              "text": "📢 *New Workflow Triggered* 🚀\n\n*Environment:* `${{ inputs.environment }}`\n📝 *Message:* `${{ inputs.message }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
             }' https://slack.com/api/chat.postMessage
