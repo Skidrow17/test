@@ -3,8 +3,8 @@ name: Run Anonymous Apex
 on:
   workflow_dispatch:
     inputs:
-      apex_script:
-        description: "Anonymous Apex Code"
+      apex_script_path:
+        description: "Path to Anonymous Apex Script (e.g., scripts/scripts-ci/script.apex)"
         required: true
         type: string
       environment:
@@ -46,7 +46,14 @@ jobs:
             --set-default \
             --set-default-dev-hub
 
-      - name: 'Execute Anonymous Apex'
+      - name: 'Check if Apex Script Exists'
         run: |
-          echo "${{ inputs.apex_script }}" > script.apex
-          sf apex run --file script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+          if [ ! -f "${{ inputs.apex_script_path }}" ]; then
+            echo "ERROR: Apex script not found at ${{ inputs.apex_script_path }}";
+            exit 1;
+          fi
+
+      - name: 'Copy Script to Temporary File and Execute'
+        run: |
+          cp "${{ inputs.apex_script_path }}" temp_script.apex
+          sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
