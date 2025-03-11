@@ -54,25 +54,14 @@ jobs:
           fi
 
       - name: 'Copy Script to Temporary File and Execute'
-        id: run_apex  # Add a unique ID to this step
         run: |
-            # Copy the script to a temporary file
-            cp "${{ inputs.apex_script_path }}" temp_script.apex
-        
-            # Run the script and capture the output
-            output=$(sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }})
+          cp "${{ inputs.apex_script_path }}" temp_script.apex
+          sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
 
-            # Clean the output (e.g., remove spaces or unwanted text)
-            cleaned_output=$(echo "$output" | tr -d '[:space:]')  # Removes all whitespace
-
-            # Optionally, display the cleaned output for debugging
-            echo "Cleaned script output: $cleaned_output"
-
-            # Save the cleaned output as a step output
-            echo "::set-output name=script_output::$cleaned_output"  # Set output to use later
-
-      - name: 'Trigger Slack Notification'
-        uses: ./.github/workflows/slack.yml
-        with:
-          environment: prod
-          message: "FINITO: ${{ steps.run_apex.outputs.script_output }}"  # Correctly reference the step output
+  trigger-slack-notification:
+    name: Slack Notification
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "New changes pushed to the main branch!"
+    secrets: inherit
