@@ -19,6 +19,7 @@ jobs:
     secrets: inherit
 
   validate-to-prod:
+    needs: notify-start
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
