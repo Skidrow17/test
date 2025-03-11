@@ -36,7 +36,7 @@ jobs:
     if: success()
     uses: ./.github/workflows/slack.yml
     with:
-      environment: ${{ needs.deploy-to-prod.outputs.environment }}
+      environment: prod
       message: "✅ Deployment to Prod Succeeded"
       title: "Script Completed"
     secrets: inherit
@@ -47,7 +47,7 @@ jobs:
     if: failure()
     uses: ./.github/workflows/slack.yml
     with:
-      environment: ${{ needs.deploy-to-prod.outputs.environment }}
+      environment: prod
       message: "❌ Deployment to Prod Failed Please check the logs."
       title: "Script Completed"
     secrets: inherit
