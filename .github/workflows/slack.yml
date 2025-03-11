@@ -7,7 +7,11 @@ on:
         required: true
         type: string
       message:
-        description: "Custom Slack Message"
+        description: "Message"
+        required: true
+        type: string
+      title:
+        description: "Title"
         required: true
         type: string
 
@@ -26,5 +30,5 @@ jobs:
                 -H "Authorization: Bearer $SLACK_TOKEN" \
                 --data '{
                 "channel": "github-${{ inputs.environment }}",
-                "text": "📢 *New Workflow Triggered* 🚀\n\n👤 *Triggered by:* `${{ github.actor }}`\n🌍 *Environment:* `${{ inputs.environment }}`\n📝 *Message:* `${{ inputs.message }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
+                "text": "📢 *`${{ inputs.title }}`* 🚀\n\n👤 *Triggered by:* `${{ github.actor }}`\n🌍 *Environment:* `${{ inputs.environment }}`\n📝 *Message:* `${{ inputs.message }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
                 }' https://slack.com/api/chat.postMessage

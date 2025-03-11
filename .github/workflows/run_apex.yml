@@ -23,6 +23,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       message: "Script `${{ inputs.apex_script_path }}` excecution started"
+      title: "Script Excecution Started"
     secrets: inherit
 
   deploy:
@@ -76,6 +77,7 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       message: "✅ Apex script `${{ inputs.apex_script_path }}` executed successfully in `${{ inputs.environment }}`"
+      title: "Script Completed"
     secrets: inherit
 
   notify-failure:
@@ -86,4 +88,5 @@ jobs:
     with:
       environment: ${{ inputs.environment }}
       message: "❌ Apex script `${{ inputs.apex_script_path }}` failed in `${{ inputs.environment }}`. Please check the logs."
+      title: "Script Completed"
     secrets: inherit
