@@ -53,8 +53,8 @@ jobs:
             exit 1;
           fi
 
-          - name: 'Copy Script to Temporary File and Execute'
-          run: |
+      - name: 'Copy Script to Temporary File and Execute'
+        run: |
             # Copy the script to a temporary file
             cp "${{ inputs.apex_script_path }}" temp_script.apex
         
