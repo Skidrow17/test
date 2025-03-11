@@ -57,3 +57,10 @@ jobs:
         run: |
           cp "${{ inputs.apex_script_path }}" temp_script.apex
           sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+
+  trigger-slack-notification:
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "New changes pushed to the main branch!"
+    secrets: inherit
