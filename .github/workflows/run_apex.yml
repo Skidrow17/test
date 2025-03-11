@@ -3,8 +3,8 @@ name: Run Anonymous Apex
 on:
   workflow_dispatch:
     inputs:
-      apex_script:
-        description: "Anonymous Apex Code"
+      apex_script_path:
+        description: "Path to Anonymous Apex Script (e.g., scripts/scripts-ci/script1.apex)"
         required: true
         type: string
       environment:
@@ -47,6 +47,4 @@ jobs:
             --set-default-dev-hub
 
       - name: 'Execute Anonymous Apex'
-        run: |
-          echo "${{ inputs.apex_script }}" > script.apex
-          sf apex run --file script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+        run: sf apex run --file ${{ inputs.apex_script_path }} --target-org ${{ secrets.DEPLOYMENT_USER }}
