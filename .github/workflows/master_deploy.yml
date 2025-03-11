@@ -7,8 +7,18 @@ on:
       - 'force-app/**'
 
 jobs:
-
+  
+  notify-start:
+    name: Start 
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ inputs.environment }}
+      message: "Script `${{ inputs.apex_script_path }}` excecution started"
+      title: "Prod Deployment Started"
+    secrets: inherit
+  
   deploy-to-prod:
+    needs: notify-start
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
@@ -18,4 +28,26 @@ jobs:
     permissions:
       actions: read 
       security-events: write 
-      contents: read 
+      contents: read  
+
+  notify-success:
+    name: Deployment Succeeded
+    needs: deploy-to-prod
+    if: success()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ needs.deploy-to-prod.outputs.environment }}
+      message: "✅ Deployment to Prod Succeeded"
+      title: "Script Completed"
+    secrets: inherit
+
+  notify-failure:
+    name: Deployment Failed
+    needs: deploy-to-prod
+    if: failure()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ needs.deploy-to-prod.outputs.environment }}
+      message: "❌ Deployment to Prod Failed Please check the logs."
+      title: "Script Completed"
+    secrets: inherit

@@ -16,7 +16,18 @@ on:
           - staging
 
 jobs:
+
+  notify-start:
+    name: Start 
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ inputs.environment }}
+      message: "Script `${{ inputs.apex_script_path }}` excecution started"
+      title: "Script Excecution Started"
+    secrets: inherit
+
   deploy:
+    needs: notify-start
     runs-on: ubuntu-latest
     name: Run Anonymous Apex in ${{ inputs.environment }}
     environment: ${{ inputs.environment }}
@@ -57,3 +68,25 @@ jobs:
         run: |
           cp "${{ inputs.apex_script_path }}" temp_script.apex
           sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+
+  notify-success:
+    name: Success
+    needs: deploy
+    if: success()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ inputs.environment }}
+      message: "✅ Apex script `${{ inputs.apex_script_path }}` executed successfully in `${{ inputs.environment }}`"
+      title: "Script Completed"
+    secrets: inherit
+
+  notify-failure:
+    name: Failure
+    needs: deploy
+    if: failure()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ inputs.environment }}
+      message: "❌ Apex script `${{ inputs.apex_script_path }}` failed in `${{ inputs.environment }}`. Please check the logs."
+      title: "Script Completed"
+    secrets: inherit
