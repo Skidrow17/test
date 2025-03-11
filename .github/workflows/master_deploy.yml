@@ -37,7 +37,7 @@ jobs:
     uses: ./.github/workflows/slack.yml
     with:
       environment: ${{ needs.deploy-to-prod.outputs.environment }}
-      message: "✅ Deployment to Prod Succeeded.`
+      message: "✅ Deployment to Prod Succeeded"
       title: "Script Completed"
     secrets: inherit
 
