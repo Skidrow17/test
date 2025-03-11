@@ -5,17 +5,14 @@ on:
     inputs:
       environment:
         required: true
-        type: choice
-        options:
-          - prod
-          - staging
+        type: string
       message:
         description: "Custom Slack Message"
         required: true
         type: string
 
 jobs:  
-  send-notification:
+  send-notification:  
     runs-on: ubuntu-latest  
     environment: ${{ inputs.environment }}
 
@@ -23,11 +20,11 @@ jobs:
       SLACK_TOKEN: ${{ secrets.SLACK_API }}  
 
     steps:  
-      - name: Notify Slack  
-        run: |
-          curl -X POST -H "Content-type: application/json; charset=utf-8" \
-            -H "Authorization: Bearer $SLACK_TOKEN" \
-            --data '{
-              "channel": "github-${{ inputs.environment }}",
-              "text": "📢 *New Workflow Triggered* 🚀\n\n👤 *Triggered by:* `${{ github.actor }}`\n🌍 *Environment:* `${{ inputs.environment }}`\n📝 *Message:* `${{ inputs.message }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
-            }' https://slack.com/api/chat.postMessage
+    - name: Notify Slack  
+      run: |
+            curl -X POST -H "Content-type: application/json; charset=utf-8" \
+                -H "Authorization: Bearer $SLACK_TOKEN" \
+                --data '{
+                "channel": "github-${{ inputs.environment }}",
+                "text": "📢 *New Workflow Triggered* 🚀\n\n👤 *Triggered by:* `${{ github.actor }}`\n🌍 *Environment:* `${{ inputs.environment }}`\n📝 *Message:* `${{ inputs.message }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
+                }' https://slack.com/api/chat.postMessage
