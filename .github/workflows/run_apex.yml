@@ -18,7 +18,7 @@ on:
 jobs:
 
   notify-start:
-    name: Notify Success
+    name: Start 
     uses: ./.github/workflows/slack.yml
     with:
       environment: ${{ inputs.environment }}
@@ -69,7 +69,7 @@ jobs:
           sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
 
   notify-success:
-    name: Notify Success
+    name: Success
     needs: deploy
     if: success()
     uses: ./.github/workflows/slack.yml
@@ -79,7 +79,7 @@ jobs:
     secrets: inherit
 
   notify-failure:
-    name: Notify Failure
+    name: Failure
     needs: deploy
     if: failure()
     uses: ./.github/workflows/slack.yml
