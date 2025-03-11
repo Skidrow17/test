@@ -1,0 +1,30 @@
+name: PR Slack Notification	
+
+on:	
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Select Environment"
+        required: true
+        type: choice
+        options:
+          - prod
+          - staging
+
+jobs:	
+  send-notification:	
+    runs-on: ubuntu-latest	
+    environment: ${{ inputs.environment }}
+
+    env:	
+      SLACK_TOKEN: ${{ secrets.SLACK_API }}	
+
+    steps:	
+      - name: Notify Slack	
+        run: |	
+          curl -X POST -H "Content-type: application/json" \
+            -H "Authorization: Bearer $SLACK_TOKEN" \
+            --data '{
+              "channel": "github-${{ inputs.environment }}",
+              "text": "📢 *New Workflow Triggered* 🚀\n\n*Environment:* `${{ inputs.environment }}`\n🔗 *Trigger Details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Workflow>"
+            }' https://slack.com/api/chat.postMessage
