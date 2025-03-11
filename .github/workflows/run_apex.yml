@@ -46,6 +46,14 @@ jobs:
             --set-default \
             --set-default-dev-hub
 
-      - name: 'Read Apex Script and Execute'
+      - name: 'Check if Apex Script Exists'
         run: |
-          cat ${{ inputs.apex_script_path }} | sf apex run --target-org ${{ secrets.DEPLOYMENT_USER }}
+          if [ ! -f "${{ inputs.apex_script_path }}" ]; then
+            echo "❌ ERROR: Apex script not found at ${{ inputs.apex_script_path }}";
+            exit 1;
+          fi
+
+      - name: 'Copy Script to Temporary File and Execute'
+        run: |
+          cp "${{ inputs.apex_script_path }}" temp_script.apex
+          sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
