@@ -12,8 +12,8 @@ jobs:
     name: Start 
     uses: ./.github/workflows/slack.yml
     with:
-      environment: ${{ inputs.environment }}
-      message: "Script `${{ inputs.apex_script_path }}` excecution started"
+      environment: prod
+      message: "Deployment Started"
       title: "Prod Deployment Started"
     secrets: inherit
   
