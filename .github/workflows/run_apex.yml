@@ -57,7 +57,7 @@ jobs:
         id: apex_run
         run: |
           cp "${{ inputs.apex_script_path }}" temp_script.apex
-          output=$(sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }})
+          output=$(sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }} 2>&1)
           echo "Apex run output: $output"
           echo "::set-output name=apex_output::$output"
 
