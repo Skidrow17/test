@@ -58,11 +58,22 @@ jobs:
           cp "${{ inputs.apex_script_path }}" temp_script.apex
           sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
 
-  trigger-slack-notification:
-    name: Slack Notification
+  notify-success:
+    name: Notify Success
     needs: deploy
+    if: success()
     uses: ./.github/workflows/slack.yml
     with:
-      environment: prod
-      message: "Script ${{ inputs.apex_script_path }} executed Successfully"
+      environment: ${{ inputs.environment }}
+      message: "✅ Apex script `${{ inputs.apex_script_path }}` executed successfully in `${{ inputs.environment }}`"
+    secrets: inherit
+
+  notify-failure:
+    name: Notify Failure
+    needs: deploy
+    if: failure()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: ${{ inputs.environment }}
+      message: "❌ Apex script `${{ inputs.apex_script_path }}` failed in `${{ inputs.environment }}`. Please check the logs."
     secrets: inherit
