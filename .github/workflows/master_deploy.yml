@@ -38,7 +38,7 @@ jobs:
     with:
       environment: prod
       message: "✅ Deployment to Prod Succeeded"
-      title: "Script Completed"
+      title: "Deployment Succeeded"
     secrets: inherit
 
   notify-failure:
@@ -49,5 +49,5 @@ jobs:
     with:
       environment: prod
       message: "❌ Deployment to Prod Failed Please check the logs."
-      title: "Script Completed"
+      title: "Deployment Failed"
     secrets: inherit
