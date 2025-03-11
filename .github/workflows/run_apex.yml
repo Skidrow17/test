@@ -54,9 +54,12 @@ jobs:
           fi
 
       - name: 'Copy Script to Temporary File and Execute'
+        id: apex_run
         run: |
           cp "${{ inputs.apex_script_path }}" temp_script.apex
-          sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }}
+          output=$(sf apex run --file temp_script.apex --target-org ${{ secrets.DEPLOYMENT_USER }})
+          echo "Apex run output: $output"
+          echo "::set-output name=apex_output::$output"
 
   trigger-slack-notification:
     name: Slack Notification
@@ -64,5 +67,7 @@ jobs:
     uses: ./.github/workflows/slack.yml
     with:
       environment: prod
-      message: "Script ${{ inputs.apex_script_path }} executed Successfully"
+      message: |
+        Script ${{ inputs.apex_script_path }} executed successfully.
+        Output: ${{ needs.deploy.outputs.apex_output }}
     secrets: inherit
