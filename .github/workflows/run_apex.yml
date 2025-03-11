@@ -63,5 +63,5 @@ jobs:
     uses: ./.github/workflows/slack.yml
     with:
       environment: prod
-      message: "New changes pushed to the main branch!"
+      message: "Script ${{ inputs.apex_script_path }} excecuted Successfully"
     secrets: inherit
