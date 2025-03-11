@@ -9,14 +9,45 @@ on:
 
 jobs:
 
+  notify-start:
+    name: Start 
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "Validation Started"
+      title: "Prod Validation Started"
+    secrets: inherit
+
   validate-to-prod:
     uses: ./.github/workflows/deploy.yml
     with:
       environment: prod
-      deploy_action: deploy
+      deploy_action: validate
     secrets: inherit
 
     permissions:
       actions: read 
       security-events: write 
       contents: read 
+
+  notify-success:
+    name: Validation Succeeded
+    needs: validate-to-prod
+    if: success()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "✅ Validation to Prod Succeeded"
+      title: "Validation Succeeded"
+    secrets: inherit
+
+  notify-failure:
+    name: Validation Failed
+    needs: validate-to-prod
+    if: failure()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "❌ Validation to Prod Failed Please check the logs."
+      title: "Validation Failed"
+    secrets: inherit
