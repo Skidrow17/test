@@ -3,7 +3,8 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
-            "query": "SELECT OriginId__c, Name FROM Product2 WHERE OriginId__c != null"
+            "query": "SELECT OriginId__c, Name FROM Product2 WHERE OriginId__c != null",
+            "master" : false
         },
         {
             "operation": "Upsert",
