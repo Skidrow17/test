@@ -30,7 +30,7 @@
         <locationX>176</locationX>
         <locationY>323</locationY>
         <inputAssignments>
-            <field>ExternalId</field>
+            <field>OriginId__c</field>
             <value>
                 <elementReference>$Record.Id</elementReference>
             </value>
