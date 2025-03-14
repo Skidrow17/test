@@ -6,6 +6,9 @@ on:
       environment:
         required: true
         type: string
+      date_folder:
+        required: true
+        type: string
     secrets:
       JWT_SERVER_KEY:
         required: true

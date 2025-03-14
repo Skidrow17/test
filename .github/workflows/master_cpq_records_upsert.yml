@@ -23,6 +23,7 @@ jobs:
     uses: ./.github/workflows/record_insert.yml
     with:
       environment: prod
+      data_folder: cpq
     secrets: inherit
 
     permissions:
