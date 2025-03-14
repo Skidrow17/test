@@ -1,0 +1,53 @@
+name: CPQ Record Upsert to Production Environment
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'force-app/**'
+
+jobs:
+  
+  notify-start:
+    name: Start 
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "Record Integration Started"
+      title: "CPQ Record Integration Started"
+    secrets: inherit
+  
+  deploy-to-prod:
+    needs: notify-start
+    uses: ./.github/workflows/record_insert.yml
+    with:
+      environment: prod
+    secrets: inherit
+
+    permissions:
+      actions: read 
+      security-events: write 
+      contents: read  
+
+  notify-success:
+    name: Deployment Succeeded
+    needs: deploy-to-prod
+    if: success()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "✅ Deployment to Prod Succeeded"
+      title: "Deployment Succeeded"
+    secrets: inherit
+
+  notify-failure:
+    name: Deployment Failed
+    needs: deploy-to-prod
+    if: failure()
+    uses: ./.github/workflows/slack.yml
+    with:
+      environment: prod
+      message: "❌ Deployment to Prod Failed Please check the logs."
+      title: "Deployment Failed"
+    secrets: inherit
