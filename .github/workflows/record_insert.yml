@@ -1,0 +1,51 @@
+name: Records Insert to Salesforce Environment
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      data_folder:
+        required: true
+        type: string
+    secrets:
+      JWT_SERVER_KEY:
+        required: true
+      DEPLOYMENT_USER:
+        required: true
+      CONSUMER_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name:  Records Import to ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 'Checkout Source Code'
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 2
+
+      - name: 'Install Salesforce CLI'
+        run: npm install -g @salesforce/cli@2.77.6
+
+      - name: 'Install sfdmu'
+        run: |
+          echo Y | sf plugins install sfdmu
+          sf plugins
+      
+      - name: 'Records Import ${{ inputs.environment }}'
+        run: |
+              echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
+              sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
+              cd ${{ inputs.data_folder }}
+              sf sfdmu run --sourceusername csvfile --targetusername ${{ secrets.DEPLOYMENT_USER }} --nowarnings
+              yes y | sf sfdmu run --sourceusername csvfile --targetusername ${{ secrets.DEPLOYMENT_USER }}
