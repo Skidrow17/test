@@ -1,4 +1,4 @@
-name: Deploy to Salesforce Environment
+name: Records Insert to Salesforce Environment
 
 on:
   workflow_call:
@@ -47,4 +47,4 @@ jobs:
               echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
               sf org login jwt --username ${{ secrets.DEPLOYMENT_USER }} --jwt-key-file server.key --client-id ${{ secrets.CONSUMER_KEY }} --instance-url ${{ vars.INSTANCE_URL }} --set-default
               cd ${{ inputs.data_folder }}
-              sf sfdmu run --sourceusername csvfile --targetusername ${{ secrets.DEPLOYMENT_USER }}
+              sf sfdmu run --sourceusername csvfile --targetusername ${{ secrets.DEPLOYMENT_USER }} --nowarnings
