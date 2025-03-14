@@ -3,8 +3,7 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
-            "query": "SELECT Id, OriginId__c, Name FROM Product2 WHERE OriginId__c != null",
-            "useValuesMapping": true
+            "query": "SELECT Id, OriginId__c, Name FROM Product2 WHERE OriginId__c != null"
         },
         {
             "operation": "Upsert",
@@ -14,7 +13,7 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
-            "query": "SELECT OriginId__c, Product2Id, UnitPrice, Pricebook2Id FROM PricebookEntry WHERE OriginId__c != null"
+            "query": "SELECT OriginId__c, Product2.OriginId__c, UnitPrice, Pricebook2.OriginId__c FROM PricebookEntry WHERE OriginId__c != null"
         }
     ]
 }
