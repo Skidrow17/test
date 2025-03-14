@@ -6,7 +6,7 @@ on:
       environment:
         required: true
         type: string
-      date_folder:
+      data_folder:
         required: true
         type: string
     secrets:
