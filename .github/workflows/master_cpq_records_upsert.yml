@@ -32,23 +32,23 @@ jobs:
       contents: read  
 
   notify-success:
-    name: Deployment Succeeded
+    name: CPQ Record Upsert Succeeded
     needs: deploy-to-prod
     if: success()
     uses: ./.github/workflows/slack.yml
     with:
       environment: prod
-      message: "✅ Deployment to Prod Succeeded"
-      title: "Deployment Succeeded"
+      message: "✅ CPQ Record Upsert to Prod Succeeded"
+      title: "CPQ Record Upsert Succeeded"
     secrets: inherit
 
   notify-failure:
-    name: Deployment Failed
+    name: CPQ Record Upsert Failed
     needs: deploy-to-prod
     if: failure()
     uses: ./.github/workflows/slack.yml
     with:
       environment: prod
-      message: "❌ Deployment to Prod Failed Please check the logs."
-      title: "Deployment Failed"
+      message: "❌ DepCPQ Record Upsertoyment to Prod Failed Please check the logs."
+      title: "CPQ Record Upsert Failed"
     secrets: inherit
