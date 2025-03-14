@@ -10,11 +10,6 @@
         <field>PricebookEntry.OriginId__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>SBQQ__BlockPrice__c.OriginId__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
      <fieldPermissions>
         <editable>false</editable>
         <field>Product2.OriginId__c</field>
@@ -31,15 +26,5 @@
         <object>Product2</object>
         <viewAllFields>true</viewAllFields>
         <viewAllRecords>false</viewAllRecords>
-    </objectPermissions>
-    <objectPermissions>
-        <allowCreate>false</allowCreate>
-        <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>false</modifyAllRecords>
-        <object>SBQQ__BlockPrice__c</object>
-        <viewAllFields>true</viewAllFields>
-        <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
 </PermissionSet>
