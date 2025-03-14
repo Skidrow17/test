@@ -1,3 +1,4 @@
-Name,OriginId__c
-Test Product,01tak00000EbJDKAA3
-New Product Parent Test,01tak00000EbTSnAAN
+Id,Name,OriginId__c
+01tak00000EbJDKAA3,Test Product,01tak00000EbJDKAA3
+01tak00000EbTSnAAN,New Product Parent Test,01tak00000EbTSnAAN
+01tak00000EbZ1xAAF,New Product Parent SADAM,01tak00000EbZ1xAAF
