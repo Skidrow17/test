@@ -14,7 +14,7 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
-            "query": "SELECT OriginId__c, Product2, UnitPrice, Pricebook2Id FROM PricebookEntry WHERE OriginId__c != null"
+            "query": "SELECT OriginId__c, Product2Id, UnitPrice, Pricebook2Id FROM PricebookEntry WHERE OriginId__c != null"
         }
     ]
 }
