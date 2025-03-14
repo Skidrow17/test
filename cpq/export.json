@@ -8,6 +8,16 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
+            "query": "SELECT Name,OriginId__c FROM PriceBook2"
+        },
+        {
+            "operation": "Upsert",
+            "externalId": "OriginId__c",
+            "query": "SELECT Pricebook2Id,Product2.OriginId__c,UnitPrice,Pricebook2.OriginId__c FROM PricebookEntry"
+        },
+        {
+            "operation": "Upsert",
+            "externalId": "OriginId__c",
             "query": "SELECT Name, SBQQ__EffectiveDate__c, SBQQ__LowerBound__c, SBQQ__OriginalBlockPrice__c, SBQQ__Price__c, SBQQ__Product__c, SBQQ__UpperBound__c, OriginId__c FROM SBQQ__BlockPrice__c"
         }
     ]
