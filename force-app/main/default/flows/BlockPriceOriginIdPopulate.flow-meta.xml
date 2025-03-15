@@ -3,8 +3,8 @@
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <environments>Default</environments>
-    <interviewLabel>Product2ExternalIdPopulate {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Product2ExternalIdPopulate</label>
+    <interviewLabel>BlockPriceOriginIdPopulate {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>BlockPriceOriginIdPopulate</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -43,6 +43,14 @@
         <connector>
             <targetReference>PopulateExternalId</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OriginId__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>SBQQ__BlockPrice__c</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
