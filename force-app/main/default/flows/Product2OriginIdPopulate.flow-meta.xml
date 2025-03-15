@@ -43,6 +43,14 @@
         <connector>
             <targetReference>PopulateExternalId</targetReference>
         </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>OriginId__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
         <object>Product2</object>
         <recordTriggerType>Create</recordTriggerType>
         <triggerType>RecordAfterSave</triggerType>
