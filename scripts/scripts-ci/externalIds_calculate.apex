@@ -1,14 +1,14 @@
 private static final Map<String, Map<String, String>> confMap = new Map<String, Map<String, String>>{
     'Product2' => new Map<String, String>{
-        'externalIdFieldName' => 'Origin__c',
+        'externalIdFieldName' => 'OriginId__c',
         'prefix' => 'PRD'
     },
     'PriceBook2' => new Map<String, String>{
-        'externalIdFieldName' => 'Origin__c',
+        'externalIdFieldName' => 'OriginId__c',
         'prefix' => 'PBK'
     },
     'PriceBookEntry' => new Map<String, String>{
-        'externalIdFieldName' => 'Origin__c',
+        'externalIdFieldName' => 'OriginId__c',
         'prefix' => 'PBE'
     }
 };
