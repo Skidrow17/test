@@ -6,7 +6,7 @@ global class BatchExternalIdsPopulate implements Database.Batchable<SObject> {
     global BatchExternalIdsPopulate(String objectName, String originIdField, String prefix) {
         this.objectName = objectName;
         this.originIdField = originIdField;
-        this.prefix = originIdField;
+        this.prefix = prefix;
     }
 
     global Database.QueryLocator start(Database.BatchableContext BC) {
