@@ -3,6 +3,7 @@
     "keepObjectOrderWhileExecute": true,
     "perBatch": 1,
     "allOrNone": true,
+    "restApiBatchSize": 1,
     "objects": [
         {
             "operation": "Upsert",
