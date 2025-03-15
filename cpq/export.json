@@ -1,5 +1,7 @@
 {
     "excludeIdsFromCSVFiles": true,
+    "keepObjectOrderWhileExecute": true,
+    "perBatch": 1,
     "objects": [
         {
             "operation": "Upsert",
