@@ -4,15 +4,15 @@ public with sharing class BatchExternalIdsPopulate_Sched {
     private static final Map<String, Map<String, String>> confMap = new Map<String, Map<String, String>>{
         'Product2' => new Map<String, String>{
             'externalIdFieldName' => 'Origin__c',
-            'prefix' => 'PR'
+            'prefix' => 'PRD'
         },
         'PriceBook2' => new Map<String, String>{
             'externalIdFieldName' => 'Origin__c',
-            'prefix' => 'PB'
+            'prefix' => 'PBK'
         },
         'PriceBookEntry' => new Map<String, String>{
             'externalIdFieldName' => 'Origin__c',
-            'prefix' => 'PE'
+            'prefix' => 'PBE'
         }
     };
 
