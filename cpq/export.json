@@ -16,7 +16,7 @@
         {
             "operation": "Upsert",
             "externalId": "OriginId__c",
-            "query": "SELECT OriginId__c, Product2Id,Pricebook2Id, UnitPrice FROM PricebookEntry WHERE OriginId__c != null ORDER BY Pricebook2.CreatedDate ASC"
+            "query": "SELECT OriginId__c, Product2Id,Pricebook2Id, UnitPrice FROM PricebookEntry WHERE OriginId__c != null ORDER BY Pricebook2.IsStandard DESC"
         }
     ]
 }
