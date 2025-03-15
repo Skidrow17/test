@@ -16,7 +16,7 @@ global class BatchExternalIdsPopulate implements Database.Batchable<SObject> {
 
     global void execute(Database.BatchableContext BC, List<SObject> scope) {
         for (SObject record : scope) {
-            String modifiedId = prefix + record.get('Id').toString().substring(3); 
+            String modifiedId = prefix +'-'+ record.get('Id').toString().substring(3).toUpperCase(); 
             record.put(originIdField, modifiedId);
         }
         update scope;
