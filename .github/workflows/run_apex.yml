@@ -17,17 +17,7 @@ on:
 
 jobs:
 
-  notify-start:
-    name: Start 
-    uses: ./.github/workflows/slack.yml
-    with:
-      environment: ${{ inputs.environment }}
-      message: "Script `${{ inputs.apex_script_path }}` excecution started"
-      title: "Script Excecution Started"
-    secrets: inherit
-
   deploy:
-    needs: notify-start
     runs-on: ubuntu-latest
     name: Run Anonymous Apex in ${{ inputs.environment }}
     environment: ${{ inputs.environment }}
