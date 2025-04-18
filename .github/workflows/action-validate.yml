@@ -1,0 +1,117 @@
+name: Action Validate
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      JWT_SERVER_KEY:
+        required: true
+      DEPLOYMENT_USER:
+        required: true
+      CONSUMER_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Validate to ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Salesforce Environment
+        uses: ./.github/actions/setup-salesforce
+
+      - name: 'Create Delta Packages'
+        run: |
+          mkdir changed-sources
+          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
+          echo "[INFO] Diff generated"
+
+      - name: 'Run Salesforce Scanner'
+        run: |
+          sf scanner run --target changed-sources/force-app --engine pmd -o pmd-results.sarif --pmdconfig ruleset.xml --format sarif
+
+      - name: Parse SARIF and Extract PMD Results
+        id: parse-sarif
+        run: |
+          jq -r '
+            .runs[].results[] |
+            "\(.message.text) (Rule: \(.ruleId)) at \(.locations[0].physicalLocation.artifactLocation.uri):\(.locations[0].physicalLocation.region.startLine)"
+          ' pmd-results.sarif > parsed_pmd.txt
+
+      - name: Post PMD results as PR comment
+        uses: ./.github/actions/post-sf-output
+        with:
+          output-file: ${{ github.workspace }}/parsed_pmd.txt
+          comment-label: "**PMD Result**"
+          issue-number: ${{ github.event.pull_request.number }}
+
+      - name: 'Check for Vulnerabilities'
+        run: |
+          VULNERABILITY_COUNT=$(jq '.runs[].results | length' pmd-results.sarif)
+          if [ "$VULNERABILITY_COUNT" -gt 0 ]; then
+            echo "[INFO] Vulnerabilities found. Deployment aborted."
+            exit 1;
+          else
+            echo "[INFO] No vulnerabilities found. Proceeding with deployment."
+          fi
+
+      - name: 'Validate to ${{ inputs.environment }} (All Local Tests with Destructive Changes)'
+        run: |
+          KEY_FILE="server.key"
+          INSTANCE_URL="${{ vars.INSTANCE_URL }}"
+          
+          echo "${{ secrets.JWT_SERVER_KEY }}" > "$KEY_FILE"
+          
+          sf org login jwt \
+            --username "${{ secrets.DEPLOYMENT_USER }}" \
+            --jwt-key-file "$KEY_FILE" \
+            --client-id "${{ secrets.CONSUMER_KEY }}" \
+            --instance-url "$INSTANCE_URL" \
+            --set-default
+          
+          sf project deploy validate \
+            -x changed-sources/package/package.xml \
+            --post-destructive-changes changed-sources/destructiveChanges/destructiveChanges.xml \
+            --ignore-warnings | tee sf_output.txt
+          
+          rm -f "$KEY_FILE"
+
+      - name: Extract Deploy ID and Construct Setup URL
+        id: get-deploy-url
+        run: |
+          DEPLOY_ID=$(grep -Eo 'Deploy ID: [a-zA-Z0-9]{15,18}' sf_output.txt | awk '{print $3}' | head -n1)
+          
+          INSTANCE_URL="${{ vars.INSTANCE_URL }}"
+          
+          if [ -n "$DEPLOY_ID" ]; then
+            # Construct Monitor Deployment Details URL
+            ENCODED_ADDRESS="/changemgmt/monitorDeploymentsDetails.apexp?asyncId=${DEPLOY_ID}&retURL=%2Fchangemgmt%2FmonitorDeployment.apexp"
+            ENCODED_ADDRESS=$(python3 -c "import urllib.parse; print(urllib.parse.quote('${ENCODED_ADDRESS}', safe=''))")
+            DEPLOY_URL="${INSTANCE_URL}/lightning/setup/DeployStatus/page?address=${ENCODED_ADDRESS}"
+            
+            echo "Deployment Setup URL: $DEPLOY_URL"
+            echo "DEPLOY_URL=$DEPLOY_URL" >> $GITHUB_ENV
+          else
+            echo "Could not extract deploy ID from sf_output.txt"
+            echo "DEPLOY_URL=https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+          fi
+
+      - name: Post SF CLI output as PR comment
+        uses: ./.github/actions/post-sf-output
+        with:
+          output-file: ${{ github.workspace }}/sf_output.txt
+          comment-label: |
+            **Salesforce Validation Result**
+
+            [View Deployment in Salesforce](${{ env.DEPLOY_URL }})
+          issue-number: ${{ github.event.pull_request.number }}
