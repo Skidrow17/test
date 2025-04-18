@@ -8,19 +8,9 @@ on:
       - 'cpq/**'
 
 jobs:
-  
-  notify-start:
-    name: Start 
-    uses: ./.github/workflows/slack.yml
-    with:
-      environment: prod
-      message: "Record Integration Started"
-      title: "CPQ Record Integration Started"
-    secrets: inherit
-  
+    
   deploy-to-prod:
-    needs: notify-start
-    uses: ./.github/workflows/record_insert.yml
+    uses: ./.github/workflows/record-insert.yml
     with:
       environment: prod
       data_folder: cpq
@@ -29,26 +19,4 @@ jobs:
     permissions:
       actions: read 
       security-events: write 
-      contents: read  
-
-  notify-success:
-    name: CPQ Record Upsert Succeeded
-    needs: deploy-to-prod
-    if: success()
-    uses: ./.github/workflows/slack.yml
-    with:
-      environment: prod
-      message: "✅ CPQ Record Upsert to Prod Succeeded"
-      title: "CPQ Record Upsert Succeeded"
-    secrets: inherit
-
-  notify-failure:
-    name: CPQ Record Upsert Failed
-    needs: deploy-to-prod
-    if: failure()
-    uses: ./.github/workflows/slack.yml
-    with:
-      environment: prod
-      message: "❌ DepCPQ Record Upsertoyment to Prod Failed Please check the logs."
-      title: "CPQ Record Upsert Failed"
-    secrets: inherit
+      contents: read
