@@ -24,18 +24,14 @@ jobs:
     environment: ${{ inputs.environment }}
 
     steps:
-      - name: 'Setup Node.js'
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
+      
       - name: 'Checkout Source Code'
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 2
 
-      - name: 'Install Salesforce CLI'
-        run: npm install -g @salesforce/cli@2.77.6
+      - name: Setup Salesforce Environment
+        uses: ./.github/actions/setup-salesforce
 
       - name: 'Install sfdmu'
         run: |

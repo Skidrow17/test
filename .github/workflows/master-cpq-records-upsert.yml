@@ -1,0 +1,22 @@
+name: CPQ Record Upsert to Production Environment
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'cpq/**'
+
+jobs:
+    
+  deploy-to-prod:
+    uses: ./.github/workflows/record-insert.yml
+    with:
+      environment: prod
+      data_folder: cpq
+    secrets: inherit
+
+    permissions:
+      actions: read 
+      security-events: write 
+      contents: read
