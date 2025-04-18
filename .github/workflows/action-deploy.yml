@@ -1,0 +1,73 @@
+name: Action Deploy
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      JWT_SERVER_KEY:
+        required: true
+      DEPLOYMENT_USER:
+        required: true
+      CONSUMER_KEY:
+        required: true
+      KERUN_ORG_JWT_SERVER_KEY:
+        required: true
+      KERUN_ORG_DEPLOYMENT_USER:
+        required: true
+      KERUN_ORG_CONSUMER_KEY:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Salesforce Environment
+        uses: ./.github/actions/setup-salesforce
+
+      - name: 'Create Delta Packages'
+        run: |
+          mkdir changed-sources
+          sf sgd source delta --to "HEAD" --from "HEAD~1" --output-dir changed-sources/ --generate-delta --source-dir force-app/
+          echo "[INFO] Diff generated"
+
+      - name: 'Deploy to ${{ inputs.environment }} (All Local Tests with Destructive Changes)'
+        run: |
+          KEY_FILE="server.key"
+          INSTANCE_URL="${{ vars.INSTANCE_URL }}"
+          
+          echo "${{ secrets.JWT_SERVER_KEY }}" > "$KEY_FILE"
+          
+          sf org login jwt \
+            --username "${{ secrets.DEPLOYMENT_USER }}" \
+            --jwt-key-file "$KEY_FILE" \
+            --client-id "${{ secrets.CONSUMER_KEY }}" \
+            --instance-url "$INSTANCE_URL" \
+            --set-default
+
+          sf project deploy start \
+            -x changed-sources/package/package.xml \
+            --post-destructive-changes changed-sources/destructiveChanges/destructiveChanges.xml \
+            --ignore-warnings | tee sf_output.txt
+          
+          rm -f "$KEY_FILE"
+
+      - name: Update Salesforce Cases
+        uses: ./.github/actions/update-sf-cases-by-ticket
+        with:
+          kerun-instance-url: ${{ vars.KERUN_INSTANCE_URL }}
+          jwt-server-key: ${{ secrets.KERUN_ORG_JWT_SERVER_KEY }}
+          deployment-user: ${{ secrets.KERUN_ORG_DEPLOYMENT_USER }}
+          consumer-key: ${{ secrets.KERUN_ORG_CONSUMER_KEY }}
+          jira-ticket-status: ${{ vars.KERUN_ONE_CASE_STATUS }}
