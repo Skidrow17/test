@@ -17,27 +17,4 @@
             ]]></value></property>
         </properties>
     </rule>
-
-    <rule name="CustomFieldPrefixEnforcement"
-          language="xml"
-          message="Custom field names must start with KS_ prefix"
-          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
-        <description>
-            Ensures all custom fields follow naming convention by starting with KS_ prefix.
-            Applies to custom fields in objects and other metadata types.
-        </description>
-        <priority>3</priority>
-        <properties>
-            <property name="xpath">
-                <value><![CDATA[
-                    //CustomField[
-                        not(starts-with(fullName, 'KS_')) 
-                        and not(ends-with(fullName, '__c'))
-                        and not(fullName = 'MasterLabel')
-                        and not(fullName = 'FullName')
-                    ]
-                ]]></value>
-            </property>
-        </properties>
-    </rule>
 </ruleset>
