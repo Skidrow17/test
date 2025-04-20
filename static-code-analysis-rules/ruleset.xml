@@ -15,6 +15,7 @@
     <rule ref="category/apex/design.xml"/>
     <rule ref="category/apex/codestyle.xml"/>
     <rule ref="category/apex/performance.xml"/>
-    <rule ref="flow-rules.xml"/>
-    <rule ref="custom-rules.xml"/>
+    <rule ref="static-code-analysis-rules/flow/flow-rules.xml"/>
+    <rule ref="static-code-analysis-rules/metadata/custom-rules.xml"/>
+
 </ruleset>
