@@ -211,5 +211,17 @@
           ]]></value>
         </property>
       </properties>
+    </rule>
+    <rule name="UnusedActionOutput" language="xml" message="Action or data element's output is unused." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Elements like actions or lookups should serve a purpose. If not, consider removing them.</description>
+      <priority>3</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            (for $node in //Flow/(recordLookups|actionCalls|recordCreates)
+             return $node[count(//text[contains(@Text, $node/name/text/@Text)]) < 2])
+          ]]></value>
+        </property>
+      </properties>
     </rule>    
 </ruleset>
