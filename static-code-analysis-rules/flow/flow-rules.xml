@@ -177,5 +177,39 @@
           ]]></value>
         </property>
       </properties>
+    </rule>
+    <rule name="UnusedFlowResources" language="xml" message="Remove unused resource from Flow." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Remove unused resources to reduce clutter and avoid confusion.</description>
+      <priority>2</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            (for $r in //Flow//(formulas|constants|choices)
+             return $r[count(//text[contains(@Text, $r/name/text/@Text)]) < 2])
+          ]]></value>
+        </property>
+      </properties>
+    </rule>
+    <rule name="OrphanedFlowElement" language="xml" message="This element appears disconnected from the Flow." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Disconnected elements may indicate incomplete logic or leftover design artifacts.</description>
+      <priority>3</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            //Flow//*[not(connector) and not(defaultConnector) and not(predecessor)]
+          ]]></value>
+        </property>
+      </properties>
+    </rule>
+    <rule name="ElementWithoutDescription" language="xml" message="Add a description to this element to clarify its purpose." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Elements without descriptions may be hard to understand for others.</description>
+      <priority>4</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            //Flow//*[not(description) and name]
+          ]]></value>
+        </property>
+      </properties>
     </rule>    
 </ruleset>
