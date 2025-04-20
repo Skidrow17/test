@@ -156,4 +156,26 @@
         </property>
       </properties>
     </rule>
+    <rule name="NoSubflowsUsed" language="xml" message="Consider modularizing large flows using Subflows." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Subflows improve reusability and modularity of logic.</description>
+      <priority>4</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            //Flow[count(*) > 75 and not(//subflows)]
+          ]]></value>
+        </property>
+      </properties>
+    </rule>
+    <rule name="NoEntryConditions" language="xml" message="Record-triggered Flow has no entry conditions. Add filters to limit triggers." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Flows without entry conditions may be inefficient and cause unnecessary executions.</description>
+      <priority>2</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            //processType[text()='Workflow']/ancestor::Flow[not(//criteria)]
+          ]]></value>
+        </property>
+      </properties>
+    </rule>    
 </ruleset>
