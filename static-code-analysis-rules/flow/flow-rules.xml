@@ -145,4 +145,15 @@
          </property>
       </properties>
    </rule>
+   <rule name="MissingFaultConnector" language="xml" message="Add a fault connector to handle potential errors." class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+      <description>Important Flow elements should have fault paths to gracefully handle errors.</description>
+      <priority>2</priority>
+      <properties>
+        <property name="xpath">
+          <value><![CDATA[
+            //Flow/(recordCreates|recordUpdates|recordDeletes|recordLookups|actionCalls)[not(faultConnector)]
+          ]]></value>
+        </property>
+      </properties>
+    </rule>    
 </ruleset>
