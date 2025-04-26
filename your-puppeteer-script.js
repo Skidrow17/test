@@ -19,7 +19,7 @@ const credentials = {
 
   const page = await browser.newPage();
 
-  await page.waitFor(1000); // OLD Puppeteer uses waitFor(milliseconds)
+  await page.waitForTimeout(1000); // This will now work with Puppeteer v24.7.2
 
   const navigationPromise = page.waitForNavigation({ waitUntil: "networkidle0" });
 
@@ -82,7 +82,7 @@ const credentials = {
   await newPage.waitForSelector("ul .leaf .slds-tree__item .slds-tree__item-label .highlight");
   await newPage.click("ul .leaf .slds-tree__item .slds-tree__item-label .highlight");
 
-  await newPage.waitFor(1000); // old way of delay
+  await newPage.waitForTimeout(1000); // Now works with Puppeteer v24.7.2
 
   // Wait for iframe
   await newPage.waitForSelector("iframe[title*='User Interface']");
@@ -90,17 +90,17 @@ const credentials = {
   const frames = await newPage.frames();
   const userInterfaceFrame = frames.find(f => f.url().includes("/ui/setup/org/UserInterfaceUI"));
 
-  await userInterfaceFrame.waitFor(1000);
+  await userInterfaceFrame.waitForTimeout(1000); // Works here too
 
   await userInterfaceFrame.waitForSelector("#auditFieldInactiveOwner");
   await userInterfaceFrame.click("#auditFieldInactiveOwner");
 
-  await userInterfaceFrame.waitFor(2000);
+  await userInterfaceFrame.waitForTimeout(2000);
 
   await userInterfaceFrame.waitForSelector("table #saveButton");
   await userInterfaceFrame.click("table #saveButton");
 
-  await newPage.waitFor(5000);
+  await newPage.waitForTimeout(5000);
 
   await browser.close();
 })();
