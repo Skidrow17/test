@@ -18,7 +18,8 @@ const credentials = {
   });
 
   const page = await browser.newPage();
-  await page.waitForTimeout(1000);
+
+  await page.waitFor(1000); // OLD Puppeteer uses waitFor(milliseconds)
 
   const navigationPromise = page.waitForNavigation({ waitUntil: "networkidle0" });
 
@@ -31,6 +32,7 @@ const credentials = {
   await page.click("body > #left #main");
 
   // Type username
+  await page.waitForSelector("#login_form > #usernamegroup > #username_container #username");
   await page.type(
     "#login_form > #usernamegroup > #username_container #username",
     credentials.username
@@ -50,7 +52,7 @@ const credentials = {
 
   await page.waitForNavigation({ waitUntil: "networkidle0" });
 
-  // Click gear
+  // Click the gear icon
   await page.waitForSelector(
     "#oneHeader div.slds-global-header span ul li:nth-child(6) div div div.uiPopupTrigger.forceHeaderMenuTrigger div div a"
   );
@@ -58,7 +60,7 @@ const credentials = {
     "#oneHeader div.slds-global-header span ul li:nth-child(6) div div div.uiPopupTrigger.forceHeaderMenuTrigger div div a"
   );
 
-  // Click setup (open in new tab)
+  // Click setup (new page)
   await page.waitForSelector(".scrollable #all_setup_home a .slds-grid .slds-col");
   const newPagePromise = new Promise(x =>
     browser.once("targetcreated", target => x(target.page()))
@@ -68,9 +70,10 @@ const credentials = {
   const newPage = await newPagePromise;
   await newPage.setViewport({ width: 1516, height: 699 });
 
-  // Search for "User Interface"
   await newPage.waitForSelector("#split-left div div div div div input");
-  await newPage.click("#split-left div div div div div input");
+  await newPage.click("#split-left div div div div div div input");
+
+  // Search "User Interface"
   await newPage.type(
     "#split-left div div div div div input",
     "User Interface"
@@ -79,24 +82,25 @@ const credentials = {
   await newPage.waitForSelector("ul .leaf .slds-tree__item .slds-tree__item-label .highlight");
   await newPage.click("ul .leaf .slds-tree__item .slds-tree__item-label .highlight");
 
-  await newPage.waitForTimeout(1000);
+  await newPage.waitFor(1000); // old way of delay
 
-  // Wait for iframe and switch to it
+  // Wait for iframe
   await newPage.waitForSelector("iframe[title*='User Interface']");
 
   const frames = await newPage.frames();
   const userInterfaceFrame = frames.find(f => f.url().includes("/ui/setup/org/UserInterfaceUI"));
 
-  await userInterfaceFrame.waitForTimeout(1000);
+  await userInterfaceFrame.waitFor(1000);
 
   await userInterfaceFrame.waitForSelector("#auditFieldInactiveOwner");
   await userInterfaceFrame.click("#auditFieldInactiveOwner");
-  await userInterfaceFrame.waitForTimeout(2000);
+
+  await userInterfaceFrame.waitFor(2000);
 
   await userInterfaceFrame.waitForSelector("table #saveButton");
   await userInterfaceFrame.click("table #saveButton");
 
-  await newPage.waitForTimeout(5000);
+  await newPage.waitFor(5000);
 
   await browser.close();
 })();
